@@ -51,10 +51,9 @@ function getCircleCircumference(radius) {
  *  10, 0  => 5
  *  -3, 3  => 0
  */
-function getAverage(/* value1, value2 */) {
-  throw new Error('Not implemented');
-  // if ((value1 + value2) === 0) return 0;
-  // return Math.round((value1 + value2) / 2);
+function getAverage(value1, value2) {
+  if (value1 + value2 === Infinity) return Number.MAX_VALUE;
+  return (value1 + value2) / 2;
 }
 
 /**
@@ -111,8 +110,10 @@ function getLinearEquationRoot(a, b) {
  *   (0,1) (0,1)     => 0
  *   (0,1) (1,2)     => 0
  */
-function getAngleBetweenVectors(/* x1, y1, x2, y2 */) {
-  throw new Error('Not implemented');
+function getAngleBetweenVectors(x1, y1, x2, y2) {
+  const first = (x1 * x2 + y1 * y2);
+  const second = (Math.sqrt(x1 * x1 + y1 * y1) * Math.sqrt(x2 * x2 + y2 * y2));
+  return Math.acos(first / second);
 }
 
 /**
@@ -184,8 +185,8 @@ function getParallelepipedDiagonal(a, b, c) {
  *   1678, 3  => 2000
  */
 function roundToPowerOfTen(num, pow) {
-  const resPow = +`1${'0'.repeat(pow)}`;
-  return Math.round(num / resPow) * resPow;
+  const res = +`1${'0'.repeat(pow)}`;
+  return Math.round(num / res) * res;
 }
 
 /**
@@ -206,11 +207,10 @@ function roundToPowerOfTen(num, pow) {
  *   17 => true
  */
 function isPrime(n) {
-  const arr = [];
-  for (let i = 1; i <= n; i += 1) {
-    if (n % i === 0) arr.push(i);
+  for (let i = 2; i <= Math.sqrt(n); i += 1) {
+    if (n % i === 0) return false;
   }
-  return arr.length === 2;
+  return true;
 }
 
 /**

@@ -152,8 +152,8 @@ function doRectanglesOverlap(/* rect1, rect2 */) {
  *   { center: { x:0, y:0 }, radius:10 },  { x:10, y:10 }   => false
  *
  */
-function isInsideCircle(/* circle, point */) {
-  throw new Error('Not implemented');
+function isInsideCircle(circle, point) {
+  return (point.x - circle.center.x) ** 2 + (point.y - circle.center.y) ** 2 < circle.radius ** 2;
 }
 
 
@@ -168,8 +168,9 @@ function isInsideCircle(/* circle, point */) {
  *   'abracadabra'  => 'c'
  *   'entente' => null
  */
-function findFirstSingleChar(/* str */) {
-  throw new Error('Not implemented');
+function findFirstSingleChar(str) {
+  const arr = str.split('');
+  return arr.filter((item) => str.indexOf(item) === str.lastIndexOf(item))[0];
 }
 
 
@@ -332,6 +333,17 @@ function getDigitalRoot(num) {
  *   '{[(<{[]}>)]}' = true
  */
 function isBracketsBalanced(/* str */) {
+  // if (str.length % 2 !== 0) return false;
+  // const stack = [];
+  // const arr = str.split('');
+  // return arr.reduce((acc, rec) => {
+  //   if (acc.includes(rec)) {
+  //     acc.pop();
+  //   } else {
+  //     acc.push(rec);
+  //   }
+  //   return acc;
+  // }, []).length === 0;
   throw new Error('Not implemented');
 }
 
@@ -356,8 +368,8 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  return num.toString(n);
 }
 
 
