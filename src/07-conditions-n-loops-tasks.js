@@ -121,8 +121,10 @@ function isTriangle(a, b, c) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
+function doRectanglesOverlap(rect1, rect2) {
+  if (rect1.height < rect2.top) return false;
+  if (rect1.width < rect2.left) return false;
+  return true;
 }
 
 
@@ -169,8 +171,12 @@ function isInsideCircle(circle, point) {
  *   'entente' => null
  */
 function findFirstSingleChar(str) {
-  const arr = str.split('');
-  return arr.filter((item) => str.indexOf(item) === str.lastIndexOf(item))[0];
+  for (let i = 0; i < str.length; i += 1) {
+    if (str.indexOf(str[i]) === str.lastIndexOf(str[i])) {
+      return str[i];
+    }
+  }
+  return null;
 }
 
 
@@ -258,33 +264,17 @@ function reverseInteger(num) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* cnn */) {
-  // const arr = ccn.toString().split('');
-  // const odd = arr.filter((x) => x % 2 !== 0);
-  // const even = arr.filter((x) => x % 2 === 0);
-  // if (arr.length % 2 === 0) {
-  //   odd.map((x) => {
-  //     let res = +x * 2;
-  //     if (res > 9) {
-  //       res = res.toString().split('').reduce((acc, rec) => acc + rec, 0);
-  //     }
-  //     return +res;
-  //   });
-  // } else {
-  //   even.map((x) => {
-  //     let res = +x * 2;
-  //     if (res > 9) {
-  //       res = res.toString().split('').reduce((acc, rec) => acc + rec, 0);
-  //     }
-  //     return +res;
-  //   });
-  // }
-
-  // const result = [...odd, ...even];
-  // const num = result.reduce((acc, rec) => acc + rec, 0);
-
-  // return num % 10 === 0;
-  throw new Error('Not implemented');
+function isCreditCardNumber(cnn) {
+  const arr = cnn.toString().split('');
+  const module = (arr.length - 2) % 2;
+  let count = 0;
+  for (let i = 0; i < arr.length; i += 1) {
+    let n = parseInt(arr[i], 10);
+    if (i % 2 === module) n *= 2;
+    if (n > 9) n -= 9;
+    count += n;
+  }
+  return count % 10 === 0;
 }
 
 /**
@@ -332,19 +322,20 @@ function getDigitalRoot(num) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  // if (str.length % 2 !== 0) return false;
-  // const stack = [];
-  // const arr = str.split('');
-  // return arr.reduce((acc, rec) => {
-  //   if (acc.includes(rec)) {
-  //     acc.pop();
-  //   } else {
-  //     acc.push(rec);
-  //   }
-  //   return acc;
-  // }, []).length === 0;
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  if (str.length % 2 !== 0) return false;
+  const stack = [];
+  const brackets = '[]{}()<>';
+
+  for (let i = 0; i < str.length; i += 1) {
+    const index = brackets.indexOf(str[i]);
+    if (index % 2 === 0) {
+      stack.push(index + 1);
+    } else if (stack.pop() !== index) {
+      return false;
+    }
+  }
+  return stack.length === 0;
 }
 
 
@@ -385,8 +376,22 @@ function toNaryString(num, n) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  const res = [];
+  const arr = pathes[0].split('/');
+  const secondArr = pathes[1].split('/');
+  if (arr.length >= secondArr.length) {
+    for (let i = 0; i < arr.length; i += 1) {
+      if (arr[i] === secondArr[i]) {
+        res.push(arr[i]);
+      }
+    }
+  }
+  const result = res.length ? `${res.join('/')}/` : '';
+  if (pathes.length > 2) {
+    return getCommonDirectoryPath([pathes[2], result]);
+  }
+  return result;
 }
 
 
@@ -408,8 +413,22 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const m3 = [];
+  for (let i = 0; i < m1.length; i += 1) {
+    m3[i] = [];
+  }
+
+  for (let k = 0; k < m2[0].length; k += 1) {
+    for (let i = 0; i < m1.length; i += 1) {
+      let temp = 0;
+      for (let j = 0; j < m2.length; j += 1) {
+        temp += m1[i][j] * m2[j][k];
+      }
+      m3[i][k] = temp;
+    }
+  }
+  return m3;
 }
 
 
@@ -443,8 +462,20 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  for (let i = 0; i < position.length; i += 1) {
+    if (position[i].length === 3) {
+      if (position[i].every((elem) => elem === 'X')) return 'X';
+      if (position[i].every((elem) => elem === '0')) return '0';
+      if (position.every((arr) => arr[i] === 'X')) return 'X';
+      if (position.every((arr) => arr[i] === '0')) return '0';
+    }
+  }
+  if (position[0][0] === 'X' && position[1][1] === 'X' && position[2][2] === 'X') return 'X';
+  if (position[0][0] === '0' && position[1][1] === '0' && position[2][2] === '0') return '0';
+  if (position[0][2] === 'X' && position[1][1] === 'X' && position[2][0] === 'X') return 'X';
+  if (position[0][2] === '0' && position[1][1] === '0' && position[2][0] === '0') return '0';
+  return undefined;
 }
 
 
